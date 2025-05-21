@@ -1,10 +1,12 @@
-1. In the html file (C:\Program Files\Nenboard\Server\site.html)
+1. Download the program by downloading Setup.msi
+
+2. In the html file (C:\Program Files\Nenboard\Server\site.html)
 write your website. 
 
-2. After that, run the Server program via a shortcut
+3.1. After that, run the Server program via a shortcut
 on the desktop. 
 
-3. You can also start the program via the console by 
+3.2. You can also start the program via the console by 
 entering the command:
 
 start "Server" "C:\Program Files\Nenboard\Server\Server.exe " 80
