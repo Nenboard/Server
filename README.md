@@ -8,9 +8,9 @@ on the desktop.
 
 2.2. You can also start the program via the console by 
 entering the command:
-................................................................
+
 start "Server" "C:\Program Files\Nenboard\Server\Server.exe " 80
-................................................................
+
 (80 is the web server port).
 
 3. After that, launch the browser,
