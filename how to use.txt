@@ -1,0 +1,17 @@
+1. Write your website in the file site.html
+(C:\Program Files\Nenboard\Server\site.html)
+
+2.1. Run the Server program via a shortcut
+on the desktop.
+
+2.2. You can also start the program via the console by 
+entering the command:
+
+start "Server" "C:\Program Files\Nenboard\Server\Server.exe" 80
+
+3. After that, launch the browser, and enter your IP address
+with the server port. If you started the server via a shortcut,
+the default port is 80.
+
+4. All information from the console is written to a file log.txt.
+(C:\Program Files\Nenboard\Server\log.txt)
