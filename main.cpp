@@ -12,7 +12,7 @@ char response[1024 * 1024]{};
 char index[1024 * 1024]{};
 bool loop;
 sockaddr_in ip{};
-char ips[1024][1024]{};
+char ips[16][16]{};
 int banneds;
 char excs[1024][1024]{};
 int chars;
@@ -21,7 +21,6 @@ char line[1024]{};
 char url[1024]{};
 char message[1024]{};
 char take[1024]{};
-char request[1024]{};
 
 static int time()
 {
@@ -92,7 +91,7 @@ static int messages()
 		step++;
 	}
 
-	if (strcmp(message, request) and strlen(message) == 0 and handle)
+	if (strlen(message) == 0)
 	{
 		time();
 		printf("New connection: %s\n", inet_ntoa(ip.sin_addr));
@@ -106,7 +105,7 @@ static int messages()
 		}
 	}
 
-	if (strcmp(message, request) and strlen(message) > 0 and handle)
+	if (strlen(message) > 0 and handle)
 	{
 		time();
 		printf("Message: %s\n", message);
@@ -140,59 +139,6 @@ static int messages()
 		}
 	}
 
-	if (!strcmp(message, request) and handle)
-	{
-		step = (int)strlen(response) - 1;
-		while (step >= 0)
-		{
-			response[step] = '\0';
-			step--;
-		}
-
-		step = 0;
-		while (step < strlen(status) - 1)
-		{
-			response[step] = status[step];
-			step++;
-		}
-
-		save = (int)strlen(response) - 1;
-		while (response[save] != ' ')
-		{
-			response[save] = '\0';
-			save--;
-		}
-		save++;
-
-		step = 0;
-		while (step < strlen(take))
-		{
-			response[save] = take[step];
-			save++;
-			step++;
-		}
-	}
-
-	return 0;
-}
-
-static int recover()
-{
-	int step = (int)strlen(response) - 1;
-	while (step >= 0)
-	{
-		response[step] = '\0';
-		step--;
-	}
-
-	step = 0;
-	while (step < strlen(status))
-	{
-		response[step] = status[step];
-		step++;
-	}
-	strcat_s(response, index);
-
 	return 0;
 }
 
@@ -201,7 +147,6 @@ static int clients(SOCKET client)
 	recv(client, buffer, 1024, NULL);
 	messages();
 	send(client, response, (int)strlen(response), NULL);
-	recover();
 	closesocket(client);
 
 	return 0;
@@ -210,16 +155,20 @@ static int clients(SOCKET client)
 static int accepts(SOCKET server)
 {
 	SOCKET client;
-	int socklen = sizeof(ip);
+	int len = 16;
 	thrd_t threads[1]{};
 
 	while (loop)
 	{
-		client = accept(server, (sockaddr*)&ip, &socklen);
+		client = accept(server, NULL, NULL);
 		if (client != INVALID_SOCKET)
 		{
-			bool handle = true;
+			if (inet_ntoa(ip.sin_addr) != NULL)
+			{
+				getpeername(client, (sockaddr*)&ip, &len);
+			}
 			int step = 0;
+			bool handle = true;
 			while (step < banneds)
 			{
 				if (!strcmp(inet_ntoa(ip.sin_addr), ips[step]))
@@ -256,15 +205,6 @@ int main(int count, char** arguments)
 	else
 	{
 		port = 8000;
-	}
-
-	if (count >= 3)
-	{
-		strcat_s(request, arguments[2]);
-	}
-	else
-	{
-		strcat_s(request, "~");
 	}
 
 	SOCKET server = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -323,7 +263,7 @@ int main(int count, char** arguments)
 		result = true;
 		while (result)
 		{
-			result = fgets(ips[step], 1024, ip);
+			result = fgets(ips[step], 16, ip);
 			if (ips[step][strlen(ips[step]) - 1] == '\n')
 			{
 				ips[step][strlen(ips[step]) - 1] = '\0';
@@ -342,7 +282,7 @@ int main(int count, char** arguments)
 		result = true;
 		while (result)
 		{
-			result = fgets(excs[step], 1024, exc);
+			result = fgets(excs[step], 16, exc);
 			if (excs[step][strlen(excs[step]) - 1] == '\n')
 			{
 				excs[step][strlen(excs[step]) - 1] = '\0';
