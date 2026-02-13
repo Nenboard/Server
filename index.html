@@ -1,0 +1,69 @@
+<html>
+<head>
+    <style>
+        body {
+            margin: 0px;
+        }
+    </style>
+</head>
+
+<body onmousemove="pos()">
+    <script>
+        var position = "0QWE0"
+        function pos()
+        {
+            position = event.pageX+'QWE'+event.pageY;
+        }
+
+        var isMouseDown = false;
+        document.body.onmousedown = function() { 
+            isMouseDown = true;
+        }
+        document.body.onmouseup = function() {
+            isMouseDown = false;
+        }
+
+        setInterval(move, 50)
+
+        function move() {
+            if (isMouseDown) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", position, true);
+                xhr.send();
+            }
+        }
+
+        var prev = "~";
+        setInterval(reset, 50);
+
+        <!-- ÅÑËÈ ÂÛ ÂÈÄÅÒÅ ÝÒÎÒ ÒÅÊÑÒ, ÒÎ ÇÍÀ×ÈÒ ÑÅÐÂÅÐ ÍÀÅÁÍÓËÑß, ÏÈØÈÒÅ ÀÄÌÈÍÓ ×ÒÎ-ÁÛ ÈÑÏÐÀÂÈË -->
+
+        function reset()
+        {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "~", true);
+            xhr.send();
+
+            xhr.onload = function()
+            {
+                if (xhr.statusText != prev)
+                {
+                    let message = xhr.statusText;
+                    prev = message;
+                    
+                    var pos = message.split("QWE");
+                    let point = document.createElement("div");
+                    point.style.position = "absolute";
+                    point.style.left = pos[0] + "px";
+                    point.style.top = pos[1] + "px";
+                    point.style.width = "5px";
+                    point.style.height = "5px";
+                    point.style.backgroundColor = "#000000";
+                    point.style.borderRadius = "100%";
+                    document.body.appendChild(point);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
