@@ -1,0 +1,18 @@
+<html>
+<head>
+    
+</head>
+<body>
+    <input id="input" />
+    <button onclick="send()">Send</button>
+    
+    <script>
+        function send()
+        {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", document.getElementById("input").value, true);
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
